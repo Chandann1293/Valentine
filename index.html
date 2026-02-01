@@ -1,19 +1,22 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8" />
+<meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Valentine 💖</title>
 
 <style>
-body {
+html, body {
   margin: 0;
-  min-height: 100vh;
+  padding: 0;
+  width: 100%;
+  height: 100%;
+}
+
+body {
   background: linear-gradient(135deg, #ffd6e8, #ffeef5);
   font-family: Arial, sans-serif;
-  display: flex;
-  justify-content: center;
-  align-items: center;
+  font-size: 20px;
   overflow: hidden;
 }
 
@@ -21,17 +24,16 @@ body {
 .heart {
   position: fixed;
   bottom: -20px;
-  font-size: 18px;
+  font-size: 22px;
   animation: floatUp 8s linear infinite;
-  opacity: 0.6;
+  opacity: 0.7;
   pointer-events: none;
-  z-index: 0;
 }
 
 @keyframes floatUp {
   from {
     transform: translateY(0) scale(1);
-    opacity: 0.8;
+    opacity: 0.9;
   }
   to {
     transform: translateY(-120vh) scale(1.4);
@@ -39,17 +41,17 @@ body {
   }
 }
 
-/* Card */
+/* Full screen card */
 .card {
   width: 100%;
-  max-width: 420px;
-  margin: 20px;
-  background: white;
-  border-radius: 24px;
-  padding: 32px 24px;
+  height: 100%;
+  padding: 40px 24px;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
   text-align: center;
-  box-shadow: 0 20px 40px rgba(0,0,0,0.15);
-  z-index: 2;
   animation: gentleZoom 4s ease-in-out infinite;
 }
 
@@ -61,24 +63,27 @@ body {
 
 h1 {
   color: #e91e63;
-  font-size: 28px;
+  font-size: 36px;
+  margin-bottom: 16px;
 }
 
 p {
-  font-size: 18px;
+  font-size: 22px;
 }
 
+/* Buttons */
 .buttons {
   position: relative;
-  margin-top: 30px;
-  height: 140px;
+  margin-top: 40px;
+  width: 100%;
+  height: 180px;
 }
 
 button {
-  padding: 14px 28px;
-  font-size: 16px;
+  padding: 18px 36px;
+  font-size: 22px;
   border: none;
-  border-radius: 30px;
+  border-radius: 40px;
   cursor: pointer;
 }
 
@@ -90,28 +95,30 @@ button {
 #no {
   background: #eee;
   position: absolute;
+  top: 90px;
   left: 50%;
-  top: 70px;
   transform: translateX(-50%);
 }
 
+/* NO message */
 #noMsg {
-  margin-top: 25px;
-  font-size: 14px;
-  color: #999;
-  min-height: 20px;
+  margin-top: 36px;
+  font-size: 22px;
+  font-weight: 600;
+  color: #222;
+  min-height: 30px;
 }
 </style>
 </head>
 
 <body>
 
-<!-- Background Music -->
-<audio id="loveMusic" preload="auto" loop>
+<!-- Instrumental romantic music -->
+<audio id="loveMusic" preload="auto">
   <source src="https://assets.mixkit.co/music/preview/mixkit-romantic-moment-491.mp3" type="audio/mpeg">
 </audio>
 
-<div class="card">
+<div class="card" id="card">
   <h1>Prapti ❤️</h1>
   <p>Will you be my Valentine? 🥰</p>
 
@@ -124,140 +131,76 @@ button {
 </div>
 
 <script>
-/* Floating hearts background */
-function startFloatingHearts() {
-  setInterval(() => {
-    const heart = document.createElement("div");
-    heart.className = "heart";
-    heart.innerText = "💕";
-    heart.style.left = Math.random() * 100 + "vw";
-    heart.style.animationDuration = (6 + Math.random() * 4) + "s";
-    document.body.appendChild(heart);
+/* Background floating hearts */
+setInterval(() => {
+  const heart = document.createElement("div");
+  heart.className = "heart";
+  heart.innerText = "💕";
+  heart.style.left = Math.random() * 100 + "vw";
+  heart.style.animationDuration = (6 + Math.random() * 4) + "s";
+  document.body.appendChild(heart);
+  setTimeout(() => heart.remove(), 10000);
+}, 900);
 
-    setTimeout(() => heart.remove(), 10000);
-  }, 900);
-}
-
-startFloatingHearts();
-
-/* NO button behavior */
+/* NO button logic */
 function moveNo() {
   const btn = document.getElementById("no");
   const msg = document.getElementById("noMsg");
 
   const messages = [
-    "Haha nice try Dimpi 😜",
-    "Nopeee Dimpi Don 😏",
-    "You really thought? 😂",
+    "Haha nice try 😜",
+    "No chance 😏",
+    "Still dreaming? 😂",
     "Not happening 😌",
-    "Are you sure😒"
+    "Try again 🙈"
   ];
 
-  const x = Math.random() * 220 - 110;
-  const y = Math.random() * 80 - 40;
+  btn.style.transform =
+    `translate(${Math.random()*260-130}px, ${Math.random()*120-60}px)`;
 
-  btn.style.transform = `translate(${x}px, ${y}px)`;
-  msg.innerText = messages[Math.floor(Math.random() * messages.length)];
+  msg.innerText =
+    messages[Math.floor(Math.random() * messages.length)];
 
   if (navigator.vibrate) navigator.vibrate(150);
 }
 
-/* YES clicked */
+/* YES button */
 function yesClicked() {
-  document.querySelector(".card").style.animation = "none";
-
   const music = document.getElementById("loveMusic");
   music.currentTime = 0;
   music.play();
 
-  showCelebration();
-}
+  document.getElementById("card").style.animation = "none";
 
-/* Celebration screen */
-function showCelebration() {
   document.body.innerHTML = `
     <div style="
-      height:100vh;
+      width:100%;
+      height:100%;
       background:#ffeef5;
       display:flex;
       flex-direction:column;
       justify-content:center;
       align-items:center;
-      font-family:Arial;
-      overflow:hidden;
       padding:20px;
+      box-sizing:border-box;
       text-align:center;">
 
-      <h1 style="color:#e91e63; margin-bottom:20px;">
-        Yayyy 💕
+      <h1 style="color:#e91e63;font-size:36px;margin-bottom:20px;">
+        Yesss😘😘😘 💕
       </h1>
 
       <img
-        src="https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?auto=format&fit=crop&w=1200&q=80"
-        alt="Proposal on beach at sunset"
+        src="https://images.unsplash.com/photo-1520975916090-3105956dac38?auto=format&fit=crop&w=1200&q=80"
+        alt="Couple proposal silhouette on beach sunset"
         style="
-          max-width:90%;
-          max-height:60vh;
-          border-radius:18px;
+          max-width:95%;
+          max-height:65vh;
+          border-radius:22px;
           box-shadow:0 20px 40px rgba(0,0,0,0.3);
         "
       />
     </div>
   `;
-
-  launchConfetti();
-  launchHearts();
-}
-
-/* Confetti */
-function launchConfetti() {
-  const colors = ["#e91e63","#ffeb3b","#4caf50","#2196f3"];
-  const end = Date.now() + 2000;
-
-  (function frame() {
-    for (let i=0;i<6;i++) {
-      const c = document.createElement("div");
-      c.style.position="fixed";
-      c.style.left=Math.random()*100+"vw";
-      c.style.top="-10px";
-      c.style.width="8px";
-      c.style.height="8px";
-      c.style.borderRadius="50%";
-      c.style.backgroundColor=colors[Math.floor(Math.random()*colors.length)];
-      c.style.zIndex=9999;
-
-      document.body.appendChild(c);
-
-      c.animate(
-        [{transform:"translateY(0)"},
-         {transform:"translateY(110vh)"}],
-        {duration:2000+Math.random()*1000}
-      ).onfinish=()=>c.remove();
-    }
-    if (Date.now()<end) requestAnimationFrame(frame);
-  })();
-}
-
-/* Hearts on YES */
-function launchHearts() {
-  setInterval(() => {
-    const heart=document.createElement("div");
-    heart.innerHTML="💖";
-    heart.style.position="fixed";
-    heart.style.left=Math.random()*100+"vw";
-    heart.style.bottom="0";
-    heart.style.fontSize="24px";
-    heart.style.zIndex=9999;
-    document.body.appendChild(heart);
-
-    heart.animate(
-      [{transform:"translateY(0)",opacity:1},
-       {transform:"translateY(-120vh)",opacity:0}],
-      {duration:4000}
-    );
-
-    setTimeout(()=>heart.remove(),4000);
-  },400);
 }
 </script>
 
