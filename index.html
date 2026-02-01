@@ -104,8 +104,8 @@ button {
 #noMsg {
   margin-top: 36px;
   font-size: 22px;
-  font-weight: 600;
-  color: #222;
+  font-weight: 700;
+  color: #111;
   min-height: 30px;
 }
 </style>
@@ -148,9 +148,10 @@ function moveNo() {
   const msg = document.getElementById("noMsg");
 
   const messages = [
-    "Haha nice try 😜",
+    "Are you sure Dimpi?🥺",
+    "nice try 😜",
     "No chance 😏",
-    "Still dreaming? 😂",
+    "Don please think again",
     "Not happening 😌",
     "Try again 🙈"
   ];
@@ -168,7 +169,7 @@ function moveNo() {
 function yesClicked() {
   const music = document.getElementById("loveMusic");
   music.currentTime = 0;
-  music.play();
+  music.play();   // must be inside click
 
   document.getElementById("card").style.animation = "none";
 
@@ -185,18 +186,18 @@ function yesClicked() {
       box-sizing:border-box;
       text-align:center;">
 
-      <h1 style="color:#e91e63;font-size:36px;margin-bottom:20px;">
-        Yesss😘😘😘 💕
+      <h1 style="color:#e91e63;font-size:46px;margin-bottom:30px;">
+        Yess cutie😘 💕
       </h1>
 
       <img
-        src="https://images.unsplash.com/photo-1520975916090-3105956dac38?auto=format&fit=crop&w=1200&q=80"
-        alt="Couple proposal silhouette on beach sunset"
+        src="proposal.jpg"
+        alt="Proposal moment"
         style="
-          max-width:95%;
-          max-height:65vh;
-          border-radius:22px;
-          box-shadow:0 20px 40px rgba(0,0,0,0.3);
+          max-width:65%;
+          max-height:45vh;
+          border-radius:12px;
+          box-shadow:0 10px 20px rgba(0,0,0,0.3);
         "
       />
     </div>
