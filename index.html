@@ -1,135 +1,215 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<title>Valentine ♥️</title>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Valentine 💖</title>
 
 <style>
 body {
-  margin:0;
-  height:100vh;
-  display:flex;
-  justify-content:center;
-  align-items:center;
-  font-family:Arial, sans-serif;
-  background:linear-gradient(135deg,#ffd6e8,#ffeef5);
+  margin: 0;
+  min-height: 100vh;
+  background: linear-gradient(135deg, #ffd6e8, #ffeef5);
+  font-family: Arial, sans-serif;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  overflow: hidden;
 }
 
+/* Floating hearts */
+.heart {
+  position: fixed;
+  bottom: -20px;
+  font-size: 18px;
+  animation: floatUp 8s linear infinite;
+  opacity: 0.6;
+  pointer-events: none;
+  z-index: 0;
+}
+
+@keyframes floatUp {
+  from {
+    transform: translateY(0) scale(1);
+    opacity: 0.8;
+  }
+  to {
+    transform: translateY(-120vh) scale(1.4);
+    opacity: 0;
+  }
+}
+
+/* Card */
 .card {
-  background:#fff;
-  padding:40px;
-  border-radius:20px;
-  text-align:center;
-  box-shadow:0 20px 40px rgba(0,0,0,0.2);
-  width:320px;
+  width: 100%;
+  max-width: 420px;
+  margin: 20px;
+  background: white;
+  border-radius: 24px;
+  padding: 32px 24px;
+  text-align: center;
+  box-shadow: 0 20px 40px rgba(0,0,0,0.15);
+  z-index: 2;
+  animation: gentleZoom 4s ease-in-out infinite;
 }
 
-h1 { color:#e91e63; }
-p { font-size:18px; }
+@keyframes gentleZoom {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.03); }
+  100% { transform: scale(1); }
+}
+
+h1 {
+  color: #e91e63;
+  font-size: 28px;
+}
+
+p {
+  font-size: 18px;
+}
 
 .buttons {
-  position:relative;
-  height:80px;
-  margin-top:20px;
+  position: relative;
+  margin-top: 30px;
+  height: 140px;
 }
 
 button {
-  padding:12px 24px;
-  border:none;
-  border-radius:25px;
-  font-size:16px;
-  cursor:pointer;
+  padding: 14px 28px;
+  font-size: 16px;
+  border: none;
+  border-radius: 30px;
+  cursor: pointer;
 }
 
 #yes {
-  background:#e91e63;
-  color:white;
+  background: #e91e63;
+  color: white;
 }
 
 #no {
-  background:#ddd;
-  position:absolute;
-  left:120px;
+  background: #eee;
+  position: absolute;
+  left: 50%;
+  top: 70px;
+  transform: translateX(-50%);
+}
+
+#noMsg {
+  margin-top: 25px;
+  font-size: 14px;
+  color: #999;
+  min-height: 20px;
 }
 </style>
 </head>
 
 <body>
 
-<audio id="loveMusic">
+<!-- Background Music -->
+<audio id="loveMusic" preload="auto" loop>
   <source src="https://assets.mixkit.co/music/preview/mixkit-romantic-moment-491.mp3" type="audio/mpeg">
 </audio>
 
 <div class="card">
   <h1>Prapti ❤️</h1>
-  <p id="message">Will you be my Valentine? 🥰</p>
+  <p>Will you be my Valentine? 🥰</p>
 
   <div class="buttons">
     <button id="yes" onclick="yesClicked()">Yes 💖</button>
     <button id="no" onclick="moveNo()">No 🙈</button>
   </div>
+
+  <p id="noMsg"></p>
 </div>
 
 <script>
-const messages = [
-  "Are you sure Dimpi? 🥺",
-  "please think again Dimpi 😏",
-  "Don’t break my heart 💔",
-  "Nice try 😌",
-  "You can’t say no 😂",
-  "Still trying? 😜"
-];
+/* Floating hearts background */
+function startFloatingHearts() {
+  setInterval(() => {
+    const heart = document.createElement("div");
+    heart.className = "heart";
+    heart.innerText = "💕";
+    heart.style.left = Math.random() * 100 + "vw";
+    heart.style.animationDuration = (6 + Math.random() * 4) + "s";
+    document.body.appendChild(heart);
 
-function moveNo() {
-  const btn = document.getElementById("no");
-  const msg = document.getElementById("message");
-
-  btn.style.transform =
-    `translate(${Math.random()*180}px,${Math.random()*70}px)`;
-
-  msg.innerText =
-    messages[Math.floor(Math.random()*messages.length)];
-
-  if (navigator.vibrate) navigator.vibrate(200);
+    setTimeout(() => heart.remove(), 10000);
+  }, 900);
 }
 
+startFloatingHearts();
+
+/* NO button behavior */
+function moveNo() {
+  const btn = document.getElementById("no");
+  const msg = document.getElementById("noMsg");
+
+  const messages = [
+    "Haha nice try Dimpi 😜",
+    "Nopeee Dimpi Don 😏",
+    "You really thought? 😂",
+    "Not happening 😌",
+    "Are you sure😒"
+  ];
+
+  const x = Math.random() * 220 - 110;
+  const y = Math.random() * 80 - 40;
+
+  btn.style.transform = `translate(${x}px, ${y}px)`;
+  msg.innerText = messages[Math.floor(Math.random() * messages.length)];
+
+  if (navigator.vibrate) navigator.vibrate(150);
+}
+
+/* YES clicked */
 function yesClicked() {
-  document.getElementById("loveMusic").play();
+  document.querySelector(".card").style.animation = "none";
+
+  const music = document.getElementById("loveMusic");
+  music.currentTime = 0;
+  music.play();
+
   showCelebration();
 }
 
+/* Celebration screen */
 function showCelebration() {
   document.body.innerHTML = `
-  <div style="
-    height:100vh;
-    background:#ffeef5;
-    display:flex;
-    flex-direction:column;
-    justify-content:center;
-    align-items:center;
-    text-align:center;
-    font-family:Arial;
-    overflow:hidden;">
+    <div style="
+      height:100vh;
+      background:#ffeef5;
+      display:flex;
+      flex-direction:column;
+      justify-content:center;
+      align-items:center;
+      font-family:Arial;
+      overflow:hidden;
+      padding:20px;
+      text-align:center;">
 
-    <h1 style="color:#e91e63;">Yayyy 💕</h1>
+      <h1 style="color:#e91e63; margin-bottom:20px;">
+        Yayyy 💕
+      </h1>
 
-    <div id="lyrics" style="opacity:0; transition:opacity 2s;">
-      <p>Nobody's promised tomorrow</p>
-      <p>So I'ma love you every night like it's the last night</p>
-      <p>If the world was ending, I'd wanna be next to you</p>
-      <p>I'd wanna hold you just for a while and die with a smile</p>
+      <img
+        src="https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?auto=format&fit=crop&w=1200&q=80"
+        alt="Proposal on beach at sunset"
+        style="
+          max-width:90%;
+          max-height:60vh;
+          border-radius:18px;
+          box-shadow:0 20px 40px rgba(0,0,0,0.3);
+        "
+      />
     </div>
-  </div>
   `;
 
   launchConfetti();
   launchHearts();
-
-  setTimeout(() => {
-    document.getElementById("lyrics").style.opacity = 1;
-  }, 1500);
 }
 
+/* Confetti */
 function launchConfetti() {
   const colors = ["#e91e63","#ffeb3b","#4caf50","#2196f3"];
   const end = Date.now() + 2000;
@@ -143,8 +223,7 @@ function launchConfetti() {
       c.style.width="8px";
       c.style.height="8px";
       c.style.borderRadius="50%";
-      c.style.backgroundColor=
-        colors[Math.floor(Math.random()*colors.length)];
+      c.style.backgroundColor=colors[Math.floor(Math.random()*colors.length)];
       c.style.zIndex=9999;
 
       document.body.appendChild(c);
@@ -159,6 +238,7 @@ function launchConfetti() {
   })();
 }
 
+/* Hearts on YES */
 function launchHearts() {
   setInterval(() => {
     const heart=document.createElement("div");
