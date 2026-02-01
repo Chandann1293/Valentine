@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Valentine ♥️</title>
+
+<style>
+body {
+  margin:0;
+  height:100vh;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  font-family:Arial, sans-serif;
+  background:linear-gradient(135deg,#ffd6e8,#ffeef5);
+}
+
+.card {
+  background:#fff;
+  padding:40px;
+  border-radius:20px;
+  text-align:center;
+  box-shadow:0 20px 40px rgba(0,0,0,0.2);
+  width:320px;
+}
+
+h1 { color:#e91e63; }
+p { font-size:18px; }
+
+.buttons {
+  position:relative;
+  height:80px;
+  margin-top:20px;
+}
+
+button {
+  padding:12px 24px;
+  border:none;
+  border-radius:25px;
+  font-size:16px;
+  cursor:pointer;
+}
+
+#yes {
+  background:#e91e63;
+  color:white;
+}
+
+#no {
+  background:#ddd;
+  position:absolute;
+  left:120px;
+}
+</style>
+</head>
+
+<body>
+
+<audio id="loveMusic">
+  <source src="https://assets.mixkit.co/music/preview/mixkit-romantic-moment-491.mp3" type="audio/mpeg">
+</audio>
+
+<div class="card">
+  <h1>Prapti ❤️</h1>
+  <p id="message">Will you be my Valentine? 🥰</p>
+
+  <div class="buttons">
+    <button id="yes" onclick="yesClicked()">Yes 💖</button>
+    <button id="no" onclick="moveNo()">No 🙈</button>
+  </div>
+</div>
+
+<script>
+const messages = [
+  "Are you sure Dimpi? 🥺",
+  "please think again Dimpi 😏",
+  "Don’t break my heart 💔",
+  "Nice try 😌",
+  "You can’t say no 😂",
+  "Still trying? 😜"
+];
+
+function moveNo() {
+  const btn = document.getElementById("no");
+  const msg = document.getElementById("message");
+
+  btn.style.transform =
+    `translate(${Math.random()*180}px,${Math.random()*70}px)`;
+
+  msg.innerText =
+    messages[Math.floor(Math.random()*messages.length)];
+
+  if (navigator.vibrate) navigator.vibrate(200);
+}
+
+function yesClicked() {
+  document.getElementById("loveMusic").play();
+  showCelebration();
+}
+
+function showCelebration() {
+  document.body.innerHTML = `
+  <div style="
+    height:100vh;
+    background:#ffeef5;
+    display:flex;
+    flex-direction:column;
+    justify-content:center;
+    align-items:center;
+    text-align:center;
+    font-family:Arial;
+    overflow:hidden;">
+
+    <h1 style="color:#e91e63;">Yayyy 💕</h1>
+
+    <div id="lyrics" style="opacity:0; transition:opacity 2s;">
+      <p>Nobody's promised tomorrow</p>
+      <p>So I'ma love you every night like it's the last night</p>
+      <p>If the world was ending, I'd wanna be next to you</p>
+      <p>I'd wanna hold you just for a while and die with a smile</p>
+    </div>
+  </div>
+  `;
+
+  launchConfetti();
+  launchHearts();
+
+  setTimeout(() => {
+    document.getElementById("lyrics").style.opacity = 1;
+  }, 1500);
+}
+
+function launchConfetti() {
+  const colors = ["#e91e63","#ffeb3b","#4caf50","#2196f3"];
+  const end = Date.now() + 2000;
+
+  (function frame() {
+    for (let i=0;i<6;i++) {
+      const c = document.createElement("div");
+      c.style.position="fixed";
+      c.style.left=Math.random()*100+"vw";
+      c.style.top="-10px";
+      c.style.width="8px";
+      c.style.height="8px";
+      c.style.borderRadius="50%";
+      c.style.backgroundColor=
+        colors[Math.floor(Math.random()*colors.length)];
+      c.style.zIndex=9999;
+
+      document.body.appendChild(c);
+
+      c.animate(
+        [{transform:"translateY(0)"},
+         {transform:"translateY(110vh)"}],
+        {duration:2000+Math.random()*1000}
+      ).onfinish=()=>c.remove();
+    }
+    if (Date.now()<end) requestAnimationFrame(frame);
+  })();
+}
+
+function launchHearts() {
+  setInterval(() => {
+    const heart=document.createElement("div");
+    heart.innerHTML="💖";
+    heart.style.position="fixed";
+    heart.style.left=Math.random()*100+"vw";
+    heart.style.bottom="0";
+    heart.style.fontSize="24px";
+    heart.style.zIndex=9999;
+    document.body.appendChild(heart);
+
+    heart.animate(
+      [{transform:"translateY(0)",opacity:1},
+       {transform:"translateY(-120vh)",opacity:0}],
+      {duration:4000}
+    );
+
+    setTimeout(()=>heart.remove(),4000);
+  },400);
+}
+</script>
+
+</body>
+</html>
